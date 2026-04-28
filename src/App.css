@@ -1,0 +1,64 @@
+input, select, button {
+    outline: none !important;
+}
+
+.navbar-item {
+    position: relative;
+}
+
+.navbar-item::after {
+    content: '';
+    border-bottom: 2px solid #000000e6;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transition: transform 0.2s ease-in-out;
+    width: 100%;
+}
+
+.navbar-item.active-item::after {
+    transform: scaleX(1);
+}
+
+.shadow-bg {
+    box-shadow: 0px 0px 0px 1px rgba(140, 140, 140, 0.2);
+}
+
+.feed-card {
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.feed-card:hover {
+    box-shadow: 0px 0px 0px 1px rgba(140, 140, 140, 0.2), 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.connection-card {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.profile-picture {
+    position: relative;
+}
+
+.profile-picture-avatar {
+    position: relative;
+    z-index: 1;
+}
+
+.profile-picture-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #0a66c2;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+.cover-photo {
+    position: relative;
+    overflow: hidden;
+}
