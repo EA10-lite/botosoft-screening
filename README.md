@@ -106,16 +106,24 @@ pnpm dev
 
 ### Exercise 2: Interactive Todo List
 
-**Objective**: Build an interactive todo application with state management and persistence.
+**Objective**: Build a fully functional frontend Todo application with API integration and advanced interactions.
 
 **Features**:
 
 - Add, delete, and toggle task completion
 - Filter tasks by status (all, active, completed)
-- Local storage persistence
-- State management with React hooks
+- Clear all completed todos functionality
+- Optimistic UI updates with real API integration (DummyJSON API)
+- Drag-and-drop functionality to reorder items in the list
+- State management with Zustand and API-aware actions
 
-**Route**: `/todo`
+**Implementation Details**:
+
+- Uses `@dnd-kit` for accessible and robust drag-and-drop support.
+- API requests are simulated using `dummyjson.com` to fulfill the backend API requirement. State updates optimistically before confirming with the server.
+- The `TodoItem` leverages CSS transforms for smooth transition animations during dragging.
+
+**Route**: `/todo` (Home page maps to `/`)
 
 ### Exercise 3: Product Listing with API Fetch
 
@@ -139,6 +147,46 @@ pnpm dev
 - Component-based architecture with reusable UI components
 
 **Route**: `/products`
+
+## 🐳 Docker Deployment
+
+The application is fully containerized using Docker with a multi-stage build, resulting in a lightweight Nginx image.
+
+### Building the Image
+
+To build the Docker image, run the following command from the root of the project:
+
+```bash
+docker build -t botosoft-todo-app .
+```
+
+### Running the Container
+
+Once built, you can run the application container on port 8080:
+
+```bash
+docker run -p 8080:80 botosoft-todo-app
+```
+
+Then, open your browser and navigate to `http://localhost:8080`.
+
+## 🚀 Live Deployment
+
+**Live URL**: [https://todo-botosoft-screening.surge.sh](https://todo-botosoft-screening.surge.sh) (Replace with your live URL after deploying below)
+
+### How to Deploy
+
+To quickly deploy your application to Surge (a free hosting platform):
+
+1. Build the application for production:
+   ```bash
+   npm run build
+   ```
+2. Deploy the `dist` directory using Surge:
+   ```bash
+   npx surge ./dist todo-botosoft-screening.surge.sh
+   ```
+*(Note: If it's your first time using Surge, it will prompt you to create an account by entering an email and password in the terminal).*
 
 ## Design Decisions
 
