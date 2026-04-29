@@ -39,14 +39,12 @@ export const useTodoStore = create<TodoStore>()(
       fetchTodos: async () => {
         set({ isLoading: true, error: null });
         try {
-          // Only fetch if empty to respect local persistence during this session
-          // For a real app, you might always fetch and sync.
           const state = get();
           if (state.todos.length === 0) {
-             const data = await todoApi.fetchTodos();
-             set({ todos: data, isLoading: false });
+            const data = await todoApi.fetchTodos();
+            set({ todos: data, isLoading: false });
           } else {
-             set({ isLoading: false });
+            set({ isLoading: false });
           }
         } catch (err: any) {
           set({ error: err.message, isLoading: false });
@@ -56,7 +54,6 @@ export const useTodoStore = create<TodoStore>()(
       addTodo: async (text: string) => {
         if (!text.trim()) return
 
-        // Optimistic UI
         const tempId = 'temp-' + Date.now();
         const optimisticTodo: Todo = {
           id: tempId,
@@ -75,7 +72,6 @@ export const useTodoStore = create<TodoStore>()(
             todos: state.todos.map(t => t.id === tempId ? newTodo : t)
           }));
         } catch (error) {
-          // Revert optimistic update
           set((state) => ({
             todos: state.todos.filter(t => t.id !== tempId)
           }));
@@ -84,8 +80,7 @@ export const useTodoStore = create<TodoStore>()(
 
       deleteTodo: async (id: string) => {
         const previousTodos = get().todos;
-        
-        // Optimistic UI
+
         set((state) => ({
           todos: state.todos.filter((todo) => todo.id !== id),
         }))
@@ -93,7 +88,6 @@ export const useTodoStore = create<TodoStore>()(
         try {
           await todoApi.deleteTodo(id);
         } catch (error) {
-          // Revert
           set({ todos: previousTodos });
         }
       },
@@ -103,7 +97,6 @@ export const useTodoStore = create<TodoStore>()(
         const todoToToggle = previousTodos.find(t => t.id === id);
         if (!todoToToggle) return;
 
-        // Optimistic UI
         set((state) => ({
           todos: state.todos.map((todo) =>
             todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -113,8 +106,7 @@ export const useTodoStore = create<TodoStore>()(
         try {
           await todoApi.updateTodo(id, !todoToToggle.completed);
         } catch (error) {
-           // Revert
-           set({ todos: previousTodos });
+          set({ todos: previousTodos });
         }
       },
 
@@ -125,12 +117,10 @@ export const useTodoStore = create<TodoStore>()(
       clearCompleted: async () => {
         const state = get();
         const completedIds = state.todos.filter(t => t.completed).map(t => t.id);
-        
+
         if (completedIds.length === 0) return;
 
         const previousTodos = state.todos;
-
-        // Optimistic UI
         set((state) => ({
           todos: state.todos.filter((todo) => !todo.completed),
         }))
@@ -138,8 +128,7 @@ export const useTodoStore = create<TodoStore>()(
         try {
           await Promise.all(completedIds.map(id => todoApi.deleteTodo(id)));
         } catch (error) {
-           // Revert partially or fully depending on strategy. We'll do fully for simplicity.
-           set({ todos: previousTodos });
+          set({ todos: previousTodos });
         }
       },
 
@@ -166,7 +155,7 @@ export const useTodoStore = create<TodoStore>()(
     }),
     {
       name: STORAGE_KEY,
-      partialize: (state) => ({ todos: state.todos }), // Persist only todos
+      partialize: (state) => ({ todos: state.todos }),
     }
   )
 )
